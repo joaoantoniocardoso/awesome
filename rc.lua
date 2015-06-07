@@ -236,20 +236,19 @@ fswidget = lain.widgets.fs({
 batwidget = lain.widgets.bat({
     settings = function()
         local capacity = tonumber(awful.util.pread("cat /sys/class/power_supply/BAT1/capacity"))
-        local status = tostring(awful.util.pread("cat /sys/class/power_supply/BAT1/status"))
+        local status = string.sub(awful.util.pread("cat /sys/class/power_supply/BAT1/status"), 1, 1)
         local online = tonumber(awful.util.pread("cat /sys/class/power_supply/ACAD/online"))
 
         if online == 1 then online = " @ ac"
         elseif online == 0 then online = " @ bat" end
 
-        if tonumber(status) == tonumber("Discharging") then status = "▼"
-        elseif tonumber(status) == tonumber("Charging") then status = "▲"
-        elseif tonumber(status) == tonumber("Full") then status = " full " end
+        if status == "C" then status = "▲" --C for "Charging"
+        elseif status == "D" then status = "▼" --D for "Discharging" 
+        elseif status == "F" then status = "full" end --F for "Full"
         if (capacity <= 5) then 
           color = "#FF0000"
-          online = ""
-          status = ""
-          capacity = "▼▼▼ WARNING - BATTERY EXTREMELY LOW!!! ▼▼▼ " .. capacity .. " ▼▼▼"
+          widget:set_markup(markup(color, status .. status .. status .. " WARNING - BATTERY EXTREMELY LOW!!! ▼▼▼ " .. capacity .. "% " .. status .. status .. status))
+          return
         elseif (capacity <= 15) then color = "#C82E2E"
         elseif (capacity <= 25) then color = "#C8852E"
         elseif (capacity <= 50) then color = "#C8B32E"
