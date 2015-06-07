@@ -245,16 +245,16 @@ batwidget = lain.widgets.bat({
         if tonumber(status) == tonumber("Discharging") then status = "▼"
         elseif tonumber(status) == tonumber("Charging") then status = "▲"
         elseif tonumber(status) == tonumber("Full") then status = " full " end
-        if capacity > 75 then color = "#7AC82E"
-        elseif (capacity <= 75) then color = "#9FC82E"
-        elseif (capacity <= 50) then color = "#C8B32E"
-        elseif (capacity <= 25) then color = "#C8852E"
-        elseif (capacity <= 15) then color = "#C82E2E"
-        elseif (capacity <= 5) then 
+        if (capacity <= 5) then 
           color = "#FF0000"
           online = ""
           status = ""
           capacity = "▼▼▼ WARNING - BATTERY EXTREMELY LOW!!! ▼▼▼ " .. capacity .. " ▼▼▼"
+        elseif (capacity <= 15) then color = "#C82E2E"
+        elseif (capacity <= 25) then color = "#C8852E"
+        elseif (capacity <= 50) then color = "#C8B32E"
+        elseif (capacity <= 75) then color = "#9FC82E"
+        elseif capacity > 75 then color = "#7AC82E"
         end
         
         widget:set_markup(status .. " " .. markup(color, capacity .. "%" ) .. online )
@@ -455,22 +455,22 @@ globalkeys = awful.util.table.join(
         end),
 
     -- By direction client focus
-    awful.key({ modkey }, ("j" and "Down"),
+    awful.key({ modkey, altkey }, ("j" and "Down"),
         function()
             awful.client.focus.bydirection("down")
             if client.focus then client.focus:raise() end
         end),
-    awful.key({ modkey }, "k" and "Up",
+    awful.key({ modkey, altkey }, "k" and "Up",
         function()
             awful.client.focus.bydirection("up")
             if client.focus then client.focus:raise() end
         end),
-    awful.key({ modkey }, "h" and "Left",
+    awful.key({ modkey, altkey }, "h" and "Left",
         function()
             awful.client.focus.bydirection("left")
             if client.focus then client.focus:raise() end
         end),
-    awful.key({ modkey }, "l" and "Right",
+    awful.key({ modkey, altkey }, "l" and "Right",
         function()
             awful.client.focus.bydirection("right")
             if client.focus then client.focus:raise() end
